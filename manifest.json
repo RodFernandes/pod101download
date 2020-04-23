@@ -3,9 +3,6 @@
   "name": "Pod101Donwload",
   "description": "Pod 101 Donwload",
   "version": "0.1",
-  "browser_action": {
-    "default_title": "Pod 101 Donwload"
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -15,5 +12,10 @@
   ],
   "background": {
     "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_icon": "icon_16x16.png",
+    "default_popup": "index.html",
+    "default_title": "Download content Pod 101"
   }
 }
