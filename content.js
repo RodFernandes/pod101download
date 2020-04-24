@@ -12,29 +12,28 @@ function start() {
 function sendMEssage(message) {}
 
 function getAudios(element) {
-  console.log("getDialogues");
   const dialogues = document.getElementsByClassName(element);
   //const domain = getDomainActive();
 
   if (dialogues) {
     let dataset = [];
-    for (dialogue of dialogues) {
-      if (!dataset.includes(dialogue.dataset.src)) {
-        dataset.push(dialogue.dataset.src);
+
+    for (item of dialogues) {
+      if (!dataset.includes(item.dataset.src)) {
+        if (!isBlackListed(item.dataset.src)) {
+          dataset.push(item.dataset.src);
+        }
       }
     }
+
     console.log(dataset);
   }
 }
 
 function showDialoguesTextAll() {
-  console.log("setDialoguesTextAll");
   const all = document.getElementById("dialogue_tab_all_0");
-
   if (all) {
-    console.log(all.childNodes[1]);
     all.childNodes[1].click();
-    console.log("aria-selected, true");
   }
 }
 
@@ -43,14 +42,18 @@ function showExamples() {
     "lsn3-lesson-vocabulary__examples"
   );
   if (examples) {
-    //examples[0].click();
     for (item of examples) {
       if (item.type == "button") {
         item.click();
-        //console.log(item);
       }
     }
   }
+}
+
+// Using when isn't english course
+function isBlackListed(url) {
+  const audioName = url.replace(/^(.*[/\\])?/, "").replace(/(\.[^.]*)$/, "");
+  return audioName.indexOf("_e") != -1 ? true : false;
 }
 
 function setDomain(url, domainActive) {
