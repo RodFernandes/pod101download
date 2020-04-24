@@ -1,32 +1,36 @@
-.container {
+.invalidPage {
+  display: none;
+}
+
+.content {
   margin: 10px;
   padding: 5px;
   height: auto;
   width: 400px;
 }
 
-.table {
+.table101 {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-.td,
-.th {
+.td101,
+.th101 {
   border: 1px solid #ddd;
   padding: 8px;
   width: 100%;
 }
 
-.tr:nth-child(odd) {
+.tr101:nth-child(odd) {
   background-color: #f2f2f2;
 }
 
-.tr:hover {
+.tr101:hover {
   background-color: #ddd;
 }
 
-.th {
+.th101 {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;

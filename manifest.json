@@ -17,5 +17,7 @@
     "default_icon": "icon_16x16.png",
     "default_popup": "index.html",
     "default_title": "Download content Pod 101"
-  }
+  },
+  "offline_enabled": true,
+  "permissions": ["storage"]
 }
