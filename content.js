@@ -5,11 +5,14 @@ start();
 function start() {
   showDialoguesTextAll();
   showExamples();
+  getPdfs();
   getAudios("js-lsn3-play-dialogue");
   getAudios("js-lsn3-play-vocabulary");
 }
 
 function sendMEssage(message) {}
+
+function getAudiosComplementary() {}
 
 function getAudios(element) {
   const dialogues = document.getElementsByClassName(element);
@@ -26,7 +29,19 @@ function getAudios(element) {
       }
     }
 
-    console.log(dataset);
+    //console.log(dataset);
+  }
+}
+
+function getPdfs() {
+  const pdfs = document.getElementById("pdfs");
+
+  if (pdfs) {
+    const list = pdfs.getElementsByTagName("a");
+    for (item of list) {
+      if (!isBlackListed(item.dataset.trackurl))
+        console.log(item.dataset.trackurl);
+    }
   }
 }
 
@@ -52,8 +67,11 @@ function showExamples() {
 
 // Using when isn't english course
 function isBlackListed(url) {
-  const audioName = url.replace(/^(.*[/\\])?/, "").replace(/(\.[^.]*)$/, "");
-  return audioName.indexOf("_e") != -1 ? true : false;
+  const name = url.replace(/^(.*[/\\])?/, "").replace(/(\.[^.]*)$/, "");
+  return name.indexOf("_e") != -1 ||
+    name.indexOf("fluency_fast_premium_checklist") != -1
+    ? true
+    : false;
 }
 
 function setDomain(url, domainActive) {
