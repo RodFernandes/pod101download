@@ -6,21 +6,29 @@ function start() {
   showDialoguesTextAll();
   showExamples();
   getPdfs();
-  getAudios("js-lsn3-play-dialogue");
-  getAudios("js-lsn3-play-vocabulary");
+  getAudios();
+  getAudiosComplementary("js-lsn3-play-dialogue");
+  getAudiosComplementary("js-lsn3-play-vocabulary");
 }
 
 function sendMEssage(message) {}
 
-function getAudiosComplementary() {}
+function getAudios() {
+  const audios = document.getElementById("download-center");
+  let dataset = [];
+  if (audios) {
+    const list = audios.getElementsByTagName("a");
+    for (item of list) {
+      const file = item.dataset.trackurl;
+      dataset.push(file);
+    }
+  }
+}
 
-function getAudios(element) {
+function getAudiosComplementary(element) {
   const dialogues = document.getElementsByClassName(element);
-  //const domain = getDomainActive();
-
+  let dataset = [];
   if (dialogues) {
-    let dataset = [];
-
     for (item of dialogues) {
       if (!dataset.includes(item.dataset.src)) {
         if (!isBlackListed(item.dataset.src)) {
@@ -28,19 +36,20 @@ function getAudios(element) {
         }
       }
     }
-
     //console.log(dataset);
   }
 }
 
 function getPdfs() {
   const pdfs = document.getElementById("pdfs");
-
+  let dataset = [];
   if (pdfs) {
     const list = pdfs.getElementsByTagName("a");
     for (item of list) {
-      if (!isBlackListed(item.dataset.trackurl))
-        console.log(item.dataset.trackurl);
+      const file = item.dataset.trackurl;
+      if (!isBlackListed(file)) {
+        dataset.push(file);
+      }
     }
   }
 }
