@@ -19,5 +19,5 @@
     "default_title": "Download content Pod 101"
   },
   "offline_enabled": true,
-  "permissions": ["storage"]
+  "permissions": ["storage", "downloads"]
 }

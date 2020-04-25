@@ -15,12 +15,14 @@ function setStoreData(data) {
 
 function createObject() {
   let pod = {
+    class: "",
+    classnumber: "",
     pdf: getPdfs(),
     audio: getAudios(),
     audioComp: getAudiosComplementary(),
   };
 
-  console.log(pod);
+  //console.log(pod);
 
   setStoreData(pod);
 }
@@ -65,11 +67,11 @@ function getPdfs() {
     const list = pdfs.getElementsByTagName("a");
     for (item of list) {
       //const file = item.dataset.trackurl;
-      const file = item.dataset.trackurl;
-      console.log(item.href);
-      if (!isBlackListed(file)) {
-        dataset.push(setDomain(file));
-      }
+      const file = item.href;
+      //console.log(item.href);
+      // if (!isBlackListed(file)) {
+      dataset.push(file);
+      //}
     }
     //console.log(dataset);
   }

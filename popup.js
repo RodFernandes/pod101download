@@ -1,3 +1,7 @@
+// window.onload = function () {
+//   getStorageData();
+// };
+
 getStorageData();
 
 function createPdfSection(data) {
@@ -42,6 +46,9 @@ function createSection(id, data) {
       anchor.setAttribute("class", "btnDownload");
       anchor.setAttribute("href", item);
       anchor.innerHTML = "Download";
+      anchor.addEventListener("click", function (event) {
+        downloadFile(event.path[0].href);
+      });
 
       td.appendChild(anchor);
       tr.appendChild(td);
@@ -66,4 +73,40 @@ function getStorageData() {
       createAudioCompSection(pod);
     }
   });
+}
+
+function downloadFile(url) {
+  if (url) {
+    const list = url.split("/");
+    let fileName = list[list.length - 1];
+    const hasParam = fileName.indexOf("?");
+
+    if (hasParam != -1) {
+      fileName = fileName.substring(0, hasParam);
+    }
+
+    //chrome.downloads.onDeterminingFilename
+    chrome.downloads.download({
+      url: url,
+      filename: fileName,
+    });
+  }
+}
+
+function downloadFetchFile(filename, url) {
+  fetch(url)
+    .then((resp) => resp.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      // the filename you want
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      console.log("your file has downloaded!"); // or you know, something with better UX...
+    })
+    .catch(() => alert("download error: -> " + url));
 }
