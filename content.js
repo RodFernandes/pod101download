@@ -5,13 +5,25 @@ start();
 function start() {
   showDialoguesTextAll();
   showExamples();
-  getPdfs();
-  getAudios();
-  getAudiosComplementary("js-lsn3-play-dialogue");
-  getAudiosComplementary("js-lsn3-play-vocabulary");
+  createObject();
 }
 
-function sendMEssage(message) {}
+function setStoreData(data) {
+  chrome.storage.local.set({ pod: data });
+  //chrome.storage.local.clear();
+}
+
+function createObject() {
+  let pod = {
+    pdf: getPdfs(),
+    audio: getAudios(),
+    AudioComp: getAudiosComplementary(),
+  };
+
+  console.log(pod);
+
+  setStoreData(pod);
+}
 
 function getAudios() {
   const audios = document.getElementById("download-center");
@@ -22,22 +34,28 @@ function getAudios() {
       const file = item.dataset.trackurl;
       dataset.push(file);
     }
-  }
-}
-
-function getAudiosComplementary(element) {
-  const dialogues = document.getElementsByClassName(element);
-  let dataset = [];
-  if (dialogues) {
-    for (item of dialogues) {
-      if (!dataset.includes(item.dataset.src)) {
-        if (!isBlackListed(item.dataset.src)) {
-          dataset.push(item.dataset.src);
-        }
-      }
-    }
     //console.log(dataset);
   }
+  return dataset;
+}
+
+function getAudiosComplementary() {
+  const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
+  let dataset = [];
+  for (element of selection) {
+    const dialogues = document.getElementsByClassName(element);
+    if (dialogues) {
+      for (item of dialogues) {
+        if (!dataset.includes(item.dataset.src)) {
+          if (!isBlackListed(item.dataset.src)) {
+            dataset.push(item.dataset.src);
+          }
+        }
+      }
+      //console.log(dataset);
+    }
+  }
+  return dataset;
 }
 
 function getPdfs() {
@@ -51,7 +69,9 @@ function getPdfs() {
         dataset.push(file);
       }
     }
+    //console.log(dataset);
   }
+  return dataset;
 }
 
 function showDialoguesTextAll() {

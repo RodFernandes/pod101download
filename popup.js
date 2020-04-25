@@ -1,14 +1,49 @@
-//validSite();
+getStorageData();
 
-function validSite() {
-  const isSiteValid = document.getElementsByClassName("js-lsn3-play-dialogue");
-  console.log(isSiteValid);
-  if (isSiteValid && isSiteValid.length > 0)
-    if (isSiteValid) {
-      const hidePage = document.getElementsByClassName("invalidPage");
-      if (hidePage && hidePage.length > 0) {
-        hidePage[0].setAttibute("display", "none");
-      }
-      console.log(hidePage);
+function createPdfSection(data) {
+  console.log("PDF");
+  console.log(data.pdf);
+  createSection("tablepdf", data.pdf);
+}
+
+function createSection(id, data) {
+  const table = document.getElementById(id);
+  if (table && data) {
+    for (item of data) {
+      const tr = document.createElement("tr");
+
+      let td = document.createElement("td");
+      td.setAttribute("class", "td101");
+      td.innerHTML = item;
+      tr.appendChild(td);
+
+      td = document.createElement("td");
+      td.setAttribute("class", "td101");
+
+      const anchor = document.createElement("a");
+      anchor.setAttribute("class", "btnDownload");
+      anchor.setAttribute("href", "#");
+      anchor.innerHTML = "Download";
+
+      td.appendChild(anchor);
+      tr.appendChild(td);
+
+      table.appendChild(tr);
     }
+  }
+}
+
+function getStorageData() {
+  console.log("get Storage");
+  chrome.storage.local.get("pod", function (data) {
+    if (typeof data.pod == "undefined") {
+      console.log("error getStorageData");
+    } else {
+      //console.log(data.pod);
+      //result = data.pod;
+      const pod = data.pod;
+
+      createPdfSection(pod);
+    }
+  });
 }
