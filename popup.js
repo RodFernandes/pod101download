@@ -1,9 +1,13 @@
 getStorageData();
 
 function createPdfSection(data) {
-  console.log("PDF");
-  console.log(data.pdf);
+  //console.log("PDF");
+  //console.log(data.pdf);
   createSection("tablepdf", data.pdf);
+  const span = document.getElementById("qtdpdf");
+  if (span) {
+    span.innerHTML = data.pdf.length;
+  }
 }
 
 function createSection(id, data) {
@@ -22,7 +26,7 @@ function createSection(id, data) {
 
       const anchor = document.createElement("a");
       anchor.setAttribute("class", "btnDownload");
-      anchor.setAttribute("href", "#");
+      anchor.setAttribute("href", item);
       anchor.innerHTML = "Download";
 
       td.appendChild(anchor);
