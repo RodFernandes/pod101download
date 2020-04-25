@@ -4,9 +4,23 @@ function createPdfSection(data) {
   //console.log("PDF");
   //console.log(data.pdf);
   createSection("tablepdf", data.pdf);
-  const span = document.getElementById("qtdpdf");
+  setQuantity(data.pdf.length, "qtdpdf");
+}
+
+function createAudioSection(data) {
+  createSection("tableaudio", data.audio);
+  setQuantity(data.audio.length, "qtdaudio");
+}
+
+function createAudioCompSection(data) {
+  createSection("tableaudiocomp", data.audioComp);
+  setQuantity(data.audioComp.length, "qtdaudiocomp");
+}
+
+function setQuantity(qtd, element) {
+  const span = document.getElementById(element);
   if (span) {
-    span.innerHTML = data.pdf.length;
+    span.innerHTML = qtd;
   }
 }
 
@@ -48,6 +62,8 @@ function getStorageData() {
       const pod = data.pod;
 
       createPdfSection(pod);
+      createAudioSection(pod);
+      createAudioCompSection(pod);
     }
   });
 }

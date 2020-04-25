@@ -17,7 +17,7 @@ function createObject() {
   let pod = {
     pdf: getPdfs(),
     audio: getAudios(),
-    AudioComp: getAudiosComplementary(),
+    audioComp: getAudiosComplementary(),
   };
 
   console.log(pod);
@@ -48,7 +48,7 @@ function getAudiosComplementary() {
       for (item of dialogues) {
         if (!dataset.includes(item.dataset.src)) {
           if (!isBlackListed(item.dataset.src)) {
-            dataset.push(item.dataset.src);
+            dataset.push(setDomain(item.dataset.src));
           }
         }
       }
@@ -64,9 +64,11 @@ function getPdfs() {
   if (pdfs) {
     const list = pdfs.getElementsByTagName("a");
     for (item of list) {
+      //const file = item.dataset.trackurl;
       const file = item.dataset.trackurl;
+      console.log(item.href);
       if (!isBlackListed(file)) {
-        dataset.push(file);
+        dataset.push(setDomain(file));
       }
     }
     //console.log(dataset);
@@ -103,17 +105,9 @@ function isBlackListed(url) {
     : false;
 }
 
-function setDomain(url, domainActive) {
+function setDomain(url) {
   if (url.startsWith("/")) {
-    return domainActive + url;
+    return location.protocol + "//" + location.host + url;
   }
   return url;
-}
-
-function getDomainActive() {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    var tab = tabs[0];
-    var url = new URL(tab.url);
-    var domain = url.hostname;
-  });
 }
