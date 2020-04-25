@@ -15,14 +15,14 @@ function setStoreData(data) {
 
 function createObject() {
   let pod = {
-    class: "",
-    classnumber: "",
+    lesson: getClassName(),
+    lessonNumber: "",
     pdf: getPdfs(),
     audio: getAudios(),
     audioComp: getAudiosComplementary(),
   };
 
-  //console.log(pod);
+  console.log(pod);
 
   setStoreData(pod);
 }
@@ -76,6 +76,15 @@ function getPdfs() {
     //console.log(dataset);
   }
   return dataset;
+}
+
+function getClassName() {
+  const lesson = document.getElementsByClassName("r101-headline__cell-a");
+  let result = "";
+  if (lesson) {
+    result = lesson[0].childNodes[1].innerText;
+  }
+  return result;
 }
 
 function showDialoguesTextAll() {
