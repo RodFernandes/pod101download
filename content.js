@@ -17,14 +17,13 @@ function createObject() {
   let pod = {
     title: getTitle(),
     subtitle: getSubtitle(),
-    lessonNumber: "",
+    lessonNumber: getLessonNumber(),
     pdf: getPdfs(),
     audio: getAudios(),
     audioComp: getAudiosComplementary(),
   };
 
   console.log(pod);
-
   setStoreData(pod);
 }
 
@@ -102,6 +101,26 @@ function showDialoguesTextAll() {
   if (all) {
     all.childNodes[1].click();
   }
+}
+
+function getLessonNumber() {
+  const numbers = document.getElementsByClassName("js-lsn3-collection-nav");
+  let result = "";
+  if (numbers) {
+    console.log("getLessonNumber");
+    const idx = numbers[0].selectedIndex;
+    const text = numbers[0][idx].text;
+    let selected = text.substring(1, 3).trim();
+
+    for (let i = 0; i <= 1; i++) {
+      if (selected.length <= 2) {
+        selected = "0" + selected;
+      }
+    }
+
+    result = selected;
+  }
+  return result;
 }
 
 function showExamples() {
