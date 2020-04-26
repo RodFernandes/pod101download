@@ -58,7 +58,7 @@ function createSection(id, data) {
 
       let td = document.createElement("td");
       td.setAttribute("class", "td101");
-      td.innerHTML = item;
+      td.innerHTML = getFilename(item);
       tr.appendChild(td);
 
       td = document.createElement("td");
@@ -69,7 +69,7 @@ function createSection(id, data) {
       anchor.setAttribute("href", item);
       anchor.innerHTML = "Download";
       anchor.addEventListener("click", function (event) {
-        downloadFile(event.path[0].href);
+        downloadFile(event.path[0].href, id);
       });
 
       td.appendChild(anchor);
@@ -100,10 +100,22 @@ function getStorageData() {
   });
 }
 
-function downloadFile(url) {
+function getFilename(url) {
+  const list = url.split("/");
+  let fileName = list[list.length - 1];
+  return fileName;
+}
+
+function setFileFolder(id) {
+  if (id == "tableaudiocomp") {
+    return "vocabulary/";
+  }
+  return "";
+}
+
+function downloadFile(url, id) {
   if (url) {
-    const list = url.split("/");
-    let fileName = list[list.length - 1];
+    let fileName = getFilename(url);
     const hasParam = fileName.indexOf("?");
 
     if (hasParam != -1) {
@@ -115,10 +127,16 @@ function downloadFile(url) {
 
     title = title.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
 
-    fileName = number + "_" + title + "/" + fileName;
-    console.log(fileName);
+    const folder = setFileFolder(id);
+    if (folder) {
+      fileName = folder + fileName;
+    }
 
-    //chrome.downloads.onDeterminingFilename
+    fileName = number + "_" + title + "/" + fileName;
+
+    //console.log(fileName);
+
+    //chrome.downloads.onDeterminingFilename({
     chrome.downloads.download({
       url: url,
       filename: fileName,
