@@ -2,6 +2,7 @@
 //   getStorageData();
 // };
 let qtdTotal = 0;
+let pod = {};
 getStorageData();
 
 function createPdfSection(data) {
@@ -35,10 +36,10 @@ function setQtdTotal() {
   }
 }
 
-function setTitle(data) {
+function setTitle(number, data) {
   const title = document.getElementById("title");
   if (title) {
-    title.innerHTML = data;
+    title.innerHTML = "Lesson: " + number + " - " + data;
   }
 }
 
@@ -87,12 +88,12 @@ function getStorageData() {
     } else {
       //console.log(data.pod);
       //result = data.pod;
-      const pod = data.pod;
+      pod = data.pod;
 
       createPdfSection(pod);
       createAudioSection(pod);
       createAudioCompSection(pod);
-      setTitle(pod.title);
+      setTitle(pod.lessonNumber, pod.title);
       setSubtitle(pod.subtitle);
       setQtdTotal();
     }
@@ -109,6 +110,14 @@ function downloadFile(url) {
       fileName = fileName.substring(0, hasParam);
     }
 
+    let title = pod.title;
+    const number = pod.lessonNumber;
+
+    title = title.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
+
+    fileName = number + "_" + title + "/" + fileName;
+    console.log(fileName);
+
     //chrome.downloads.onDeterminingFilename
     chrome.downloads.download({
       url: url,
@@ -117,20 +126,20 @@ function downloadFile(url) {
   }
 }
 
-function downloadFetchFile(filename, url) {
-  fetch(url)
-    .then((resp) => resp.blob())
-    .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      // the filename you want
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      console.log("your file has downloaded!"); // or you know, something with better UX...
-    })
-    .catch(() => alert("download error: -> " + url));
-}
+// function downloadFetchFile(filename, url) {
+//   fetch(url)
+//     .then((resp) => resp.blob())
+//     .then((blob) => {
+//       const url = window.URL.createObjectURL(blob);
+//       const a = document.createElement("a");
+//       a.style.display = "none";
+//       a.href = url;
+//       // the filename you want
+//       a.download = filename;
+//       document.body.appendChild(a);
+//       a.click();
+//       window.URL.revokeObjectURL(url);
+//       console.log("your file has downloaded!"); // or you know, something with better UX...
+//     })
+//     .catch(() => alert("download error: -> " + url));
+// }
