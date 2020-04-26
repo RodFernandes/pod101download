@@ -1,12 +1,10 @@
 // window.onload = function () {
 //   getStorageData();
 // };
-
+let qtdTotal = 0;
 getStorageData();
 
 function createPdfSection(data) {
-  //console.log("PDF");
-  //console.log(data.pdf);
   createSection("tablepdf", data.pdf);
   setQuantity(data.pdf.length, "qtdpdf");
 }
@@ -25,6 +23,29 @@ function setQuantity(qtd, element) {
   const span = document.getElementById(element);
   if (span) {
     span.innerHTML = qtd;
+    qtdTotal += qtd;
+    console.log(qtdTotal);
+  }
+}
+
+function setQtdTotal() {
+  const qtd = document.getElementById("totalfiles");
+  if (qtd) {
+    qtd.innerHTML = "Total files: " + qtdTotal;
+  }
+}
+
+function setTitle(data) {
+  const title = document.getElementById("title");
+  if (title) {
+    title.innerHTML = data;
+  }
+}
+
+function setSubtitle(data) {
+  const title = document.getElementById("subtitle");
+  if (title) {
+    title.innerHTML = data;
   }
 }
 
@@ -71,6 +92,9 @@ function getStorageData() {
       createPdfSection(pod);
       createAudioSection(pod);
       createAudioCompSection(pod);
+      setTitle(pod.title);
+      setSubtitle(pod.subtitle);
+      setQtdTotal();
     }
   });
 }

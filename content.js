@@ -15,7 +15,8 @@ function setStoreData(data) {
 
 function createObject() {
   let pod = {
-    lesson: getClassName(),
+    title: getTitle(),
+    subtitle: getSubtitle(),
     lessonNumber: "",
     pdf: getPdfs(),
     audio: getAudios(),
@@ -78,11 +79,20 @@ function getPdfs() {
   return dataset;
 }
 
-function getClassName() {
+function getTitle() {
   const lesson = document.getElementsByClassName("r101-headline__cell-a");
   let result = "";
   if (lesson) {
     result = lesson[0].childNodes[1].innerText;
+  }
+  return result;
+}
+
+function getSubtitle() {
+  const lesson = document.getElementsByClassName("r101-headline__cell-a");
+  let result = "";
+  if (lesson) {
+    result = lesson[0].childNodes[5].innerText;
   }
   return result;
 }
