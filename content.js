@@ -2,6 +2,89 @@ console.log("Chrome Extension go");
 
 start();
 
+function getAudiosComplementary() {
+  const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
+  let dataset = [{}];
+  let count_versionb = 0;
+  for (element of selection) {
+    const dialogues = document.getElementsByClassName(element);
+
+    if (dialogues) {
+      let textList = getAudioText(element);
+
+      for (let i = 0; i < dialogues.length; i++) {
+        const datasetUrl = dialogues[i] ? dialogues[i].dataset.src : "";
+
+        let text = "";
+
+        if (isBlackListed(datasetUrl, "_b")) {
+          if (count_versionb != 0) {
+            text = textList[i - count_versionb];
+          } else {
+            text = textList[i - 1];
+          }
+          count_versionb += 1;
+        } else {
+          if (count_versionb != 0) {
+            text = textList[i - count_versionb];
+          } else {
+            text = textList[i];
+          }
+        }
+
+        if (isBlackListed(datasetUrl, "_e")) count_versionb += 1;
+
+        if (!hasObjectInArray(dataset, datasetUrl)) {
+          if (!isBlackListed(datasetUrl, "_e")) {
+            const obj = {
+              file: datasetUrl,
+              text: text,
+              //text: text[i] ? text[i].innerText : "",
+            };
+            dataset.push(obj);
+          }
+        }
+      }
+    }
+  }
+  console.log(count_versionb);
+  console.log(dataset);
+  return dataset;
+}
+
+function getAudioText(element) {
+  let text = [];
+  let result = [];
+
+  if (element == "js-lsn3-play-dialogue") {
+    text = document.getElementsByClassName("lsn3-lesson-dialogue__td--text");
+  }
+
+  if (element == "js-lsn3-play-vocabulary") {
+    text = document.getElementsByClassName("lsn3-lesson-vocabulary__term");
+  }
+
+  for (item of text) {
+    // if (!result.includes(item.innerText) && item.lang != "en") {
+    if (item.lang != "en") {
+      result.push(item.innerText);
+    }
+  }
+  //console.log(result);
+  return result;
+}
+
+function hasObjectInArray(source, url) {
+  if (!url) return false;
+
+  for (item of source) {
+    if (JSON.stringify(item.file) === JSON.stringify(url)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function start() {
   showDialoguesTextAll();
   showExamples();
@@ -41,24 +124,25 @@ function getAudios() {
   return dataset;
 }
 
-function getAudiosComplementary() {
-  const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
-  let dataset = [];
-  for (element of selection) {
-    const dialogues = document.getElementsByClassName(element);
-    if (dialogues) {
-      for (item of dialogues) {
-        if (!dataset.includes(item.dataset.src)) {
-          if (!isBlackListed(item.dataset.src)) {
-            dataset.push(setDomain(item.dataset.src));
-          }
-        }
-      }
-      //console.log(dataset);
-    }
-  }
-  return dataset;
-}
+// function getAudiosComplementary() {
+//   const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
+//   let dataset = [];
+//   for (element of selection) {
+//     const dialogues = document.getElementsByClassName(element);
+//     if (dialogues) {
+//       for (item of dialogues) {
+//         if (!dataset.includes(item.dataset.src)) {
+//           if (!isBlackListed(item.dataset.src, "_e")) {
+//             dataset.push(setDomain(item.dataset.src));
+//           }
+//         }
+//       }
+//       //console.log(dataset);
+//     }
+//   }
+//   console.log(dataset);
+//   return dataset;
+// }
 
 function getPdfs() {
   const pdfs = document.getElementById("pdfs");
@@ -69,7 +153,7 @@ function getPdfs() {
       //const file = item.dataset.trackurl;
       const file = item.href;
       //console.log(item.href);
-      // if (!isBlackListed(file)) {
+      // if (!isBlackListed(file,"_e")) {
       dataset.push(file);
       //}
     }
@@ -137,12 +221,14 @@ function showExamples() {
 }
 
 // Using when isn't english course
-function isBlackListed(url) {
-  const name = url.replace(/^(.*[/\\])?/, "").replace(/(\.[^.]*)$/, "");
-  return name.indexOf("_e") != -1 ||
-    name.indexOf("fluency_fast_premium_checklist") != -1
-    ? true
-    : false;
+function isBlackListed(url, wildcard) {
+  if (url) {
+    const name = url.replace(/^(.*[/\\])?/, "").replace(/(\.[^.]*)$/, "");
+    return name.indexOf(wildcard) != -1 ||
+      name.indexOf("fluency_fast_premium_checklist") != -1
+      ? true
+      : false;
+  }
 }
 
 function setDomain(url) {
