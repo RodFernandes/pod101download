@@ -44,8 +44,8 @@ function getAudiosComplementary() {
       }
     }
   }
-  console.log(count_versionb);
-  console.log(dataset);
+  // console.log(count_versionb);
+  // console.log(dataset);
   return dataset;
 }
 
@@ -62,38 +62,18 @@ function getAudioText(element) {
   }
 
   for (item of text) {
-    // const parent = item.parentNode.className;
-    // if (!parent) {
-    //   const trParent = item.parentNode.parentNode.childNodes[3].childNodes[1];
-    //   if (trParent) console.log(item);
-    // }
-
-    // const parentRequest = "lsn3-lesson-vocabulary__td--text";
-    // if (parent == parentRequest) {
-    //   console.log(item.childNodes[1].innerText);
-    // }
-
     if (item.lang != "en") {
       const parent = item.parentNode.className;
-      if (!parent) {
+      if (!parent && item.parentNode.parentNode.childNodes[3]) {
         const parentAudio =
           item.parentNode.parentNode.childNodes[3].childNodes[1];
         if (parentAudio) {
-          // console.log("!parent");
-          // console.log(item.innerHTML);
           result.push(item.innerHTML);
         }
       } else {
-        console.log("else");
-        //console.log(item.childNodes[1].innerText);
-        result.push(item.childNodes[1].innerText);
+        if (item.childNodes[1]) result.push(item.childNodes[1].innerText);
+        else result.push(item.innerText);
       }
-
-      // if (item.children[0]) {
-      //   result.push(item.children[0].innerText);
-      // } else {
-      //   result.push(item.innerText);
-      // }
     }
   }
   //console.log(result);
@@ -214,7 +194,6 @@ function getLessonNumber() {
   const numbers = document.getElementsByClassName("js-lsn3-collection-nav");
   let result = "";
   if (numbers) {
-    console.log("getLessonNumber");
     const idx = numbers[0].selectedIndex;
     const text = numbers[0][idx].text;
     let selected = text.substring(1, 3).trim();

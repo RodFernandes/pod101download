@@ -4,6 +4,9 @@
 let qtdTotal = 0;
 let pod = {};
 getStorageData();
+//printPage();
+
+function printPage() {}
 
 function createPdfSection(data) {
   createSection("tablepdf", data.pdf);
@@ -139,19 +142,20 @@ function downloadFile(url, text = "", id) {
     let title = pod.title;
     const number = pod.lessonNumber;
 
-    //title = title.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
     title = cleanString(title);
 
     const folder = setFileFolder(id);
     if (folder) {
       if (text) {
-        fileName = folder + cleanString(text) + "_" + fileName;
+        text = cleanString(text.trim());
+        fileName = folder + text + "_" + fileName;
       } else {
         fileName = folder + fileName;
       }
     }
 
     fileName = number + "_" + title + "/" + fileName;
+    alert(text);
 
     //console.log(fileName);
 
@@ -164,7 +168,7 @@ function downloadFile(url, text = "", id) {
 }
 
 function cleanString(string) {
-  return string.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
+  return string.replace(/[-'`~!¡@#$%^&*()_|+=?¿;:'",<>\{\}\[\]\\\/]/gi, "");
 }
 
 // function downloadFetchFile(filename, url) {
