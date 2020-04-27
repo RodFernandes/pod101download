@@ -62,3 +62,10 @@
   position: relative;
   top: 1px;
 }
+
+._clicked {
+  color: purple;
+}
+/* .btnDownload:visited {
+  color: purple;
+} */

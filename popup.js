@@ -1,6 +1,7 @@
 // window.onload = function () {
 //   getStorageData();
 // };
+
 let qtdTotal = 0;
 let pod = {};
 getStorageData();
@@ -86,6 +87,7 @@ function createSection(id, data) {
       }
       anchor.addEventListener("click", function (event) {
         console.log(event);
+        event.path[0].setAttribute("class", "btnDownload _clicked");
         downloadFile(event.path[0].href, event.path[0].name, id);
       });
 
@@ -155,7 +157,6 @@ function downloadFile(url, text = "", id) {
     }
 
     fileName = number + "_" + title + "/" + fileName;
-    alert(text);
 
     //console.log(fileName);
 

@@ -8,6 +8,11 @@ function start() {
   createObject();
 }
 
+function printPage() {
+  window.print();
+  window.close();
+}
+
 function getAudiosComplementary() {
   const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
   let dataset = [];
@@ -24,11 +29,15 @@ function getAudiosComplementary() {
         let text = "";
 
         if (isBlackListed(datasetUrl, "_b")) {
-          count_versionb += 1;
-          text = textList[i - count_versionb];
-        } else {
-          text = textList[i - count_versionb];
+          const play = dialogues[i].parentNode.parentNode.childNodes[5];
+          if (play) {
+            const hasPlay = play.innerHTML.trim();
+            if (hasPlay) {
+              count_versionb += 1;
+            }
+          }
         }
+        text = textList[i - count_versionb];
 
         if (isBlackListed(datasetUrl, "_e")) count_versionb += 1;
 
