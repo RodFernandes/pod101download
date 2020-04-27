@@ -2,55 +2,11 @@ console.log("Chrome Extension go");
 
 start();
 
-// function getAudiosComplementary() {
-//   const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
-//   let dataset = [{}];
-//   let count_versionb = 0;
-//   for (element of selection) {
-//     const dialogues = document.getElementsByClassName(element);
-
-//     if (dialogues) {
-//       let textList = getAudioText(element);
-
-//       for (let i = 0; i < dialogues.length; i++) {
-//         const datasetUrl = dialogues[i] ? dialogues[i].dataset.src : "";
-
-//         let text = "";
-
-//         if (isBlackListed(datasetUrl, "_b")) {
-//           if (count_versionb != 0) {
-//             text = textList[i - count_versionb];
-//           } else {
-//             text = textList[i - 1];
-//           }
-//           count_versionb += 1;
-//         } else {
-//           if (count_versionb != 0) {
-//             text = textList[i - count_versionb];
-//           } else {
-//             text = textList[i];
-//           }
-//         }
-
-//         if (isBlackListed(datasetUrl, "_e")) count_versionb += 1;
-
-//         if (!hasObjectInArray(dataset, datasetUrl)) {
-//           if (!isBlackListed(datasetUrl, "_e")) {
-//             const obj = {
-//               file: datasetUrl,
-//               text: text,
-//               //text: text[i] ? text[i].innerText : "",
-//             };
-//             dataset.push(obj);
-//           }
-//         }
-//       }
-//     }
-//   }
-//   console.log(count_versionb);
-//   console.log(dataset);
-//   return dataset;
-// }
+function start() {
+  showDialoguesTextAll();
+  showExamples();
+  createObject();
+}
 
 function getAudiosComplementary() {
   const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
@@ -81,7 +37,6 @@ function getAudiosComplementary() {
             const obj = {
               file: setDomain(datasetUrl),
               text: text,
-              //text: text[i] ? text[i].innerText : "",
             };
             dataset.push(obj);
           }
@@ -132,12 +87,6 @@ function hasObjectInArray(source, url) {
   return false;
 }
 
-function start() {
-  showDialoguesTextAll();
-  showExamples();
-  createObject();
-}
-
 function setStoreData(data) {
   chrome.storage.local.set({ pod: data });
   //chrome.storage.local.clear();
@@ -163,8 +112,8 @@ function getAudios() {
   if (audios) {
     const list = audios.getElementsByTagName("a");
     for (item of list) {
-      const file = item.dataset.trackurl;
-      dataset.push(file);
+      const obj = { file: item.dataset.trackurl };
+      dataset.push(obj);
     }
     //console.log(dataset);
   }
@@ -198,10 +147,13 @@ function getPdfs() {
     const list = pdfs.getElementsByTagName("a");
     for (item of list) {
       //const file = item.dataset.trackurl;
-      const file = item.href;
+      //const file = item.href;
       //console.log(item.href);
       // if (!isBlackListed(file,"_e")) {
-      dataset.push(file);
+      const obj = {
+        file: item.href,
+      };
+      dataset.push(obj);
       //}
     }
     //console.log(dataset);

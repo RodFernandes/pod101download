@@ -58,7 +58,7 @@ function createSection(id, data) {
 
       let td = document.createElement("td");
       td.setAttribute("class", "td101");
-      td.innerHTML = getFilename(item);
+      td.innerHTML = getFilename(item.file);
       tr.appendChild(td);
 
       td = document.createElement("td");
@@ -66,7 +66,7 @@ function createSection(id, data) {
 
       const anchor = document.createElement("a");
       anchor.setAttribute("class", "btnDownload");
-      anchor.setAttribute("href", item);
+      anchor.setAttribute("href", item.file);
       anchor.innerHTML = "Download";
       anchor.addEventListener("click", function (event) {
         downloadFile(event.path[0].href, id);
