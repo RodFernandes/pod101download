@@ -60,10 +60,21 @@ function getAudioText(element) {
   if (element == "js-lsn3-play-vocabulary") {
     text = document.getElementsByClassName("lsn3-lesson-vocabulary__term");
   }
-  console.log("getAudioText");
 
   for (item of text) {
-    // if (!result.includes(item.innerText) && item.lang != "en") {
+    if (element == "js-lsn3-play-vocabulary") {
+      const parent = item.parentNode.className;
+      if (!parent) {
+        const trParent = item.parentNode.parentNode.childNodes[3].childNodes[1];
+        if (trParent) console.log(item);
+      }
+
+      const parentRequest = "lsn3-lesson-vocabulary__td--text";
+      if (parent == parentRequest) {
+        console.log(item.childNodes[1].innerText);
+      }
+    }
+
     if (item.lang != "en") {
       if (item.children[0]) {
         result.push(item.children[0].innerText);
