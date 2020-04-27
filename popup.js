@@ -58,7 +58,14 @@ function createSection(id, data) {
 
       let td = document.createElement("td");
       td.setAttribute("class", "td101");
-      td.innerHTML = getFilename(item.file);
+      if (item.text) {
+        let filename = getFilename(item.file);
+        filename = cleanString(item.text) + "_" + filename;
+        td.innerHTML = filename;
+      } else {
+        td.innerHTML = getFilename(item.file);
+      }
+
       tr.appendChild(td);
 
       td = document.createElement("td");
@@ -125,7 +132,8 @@ function downloadFile(url, id) {
     let title = pod.title;
     const number = pod.lessonNumber;
 
-    title = title.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
+    //title = title.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
+    title = cleanString(title);
 
     const folder = setFileFolder(id);
     if (folder) {
@@ -142,6 +150,10 @@ function downloadFile(url, id) {
       filename: fileName,
     });
   }
+}
+
+function cleanString(string) {
+  return string.replace(/([^ a-z0-9-_]+)/gi, " ").trim();
 }
 
 // function downloadFetchFile(filename, url) {
