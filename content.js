@@ -62,25 +62,38 @@ function getAudioText(element) {
   }
 
   for (item of text) {
-    if (element == "js-lsn3-play-vocabulary") {
-      const parent = item.parentNode.className;
-      if (!parent) {
-        const trParent = item.parentNode.parentNode.childNodes[3].childNodes[1];
-        if (trParent) console.log(item);
-      }
+    // const parent = item.parentNode.className;
+    // if (!parent) {
+    //   const trParent = item.parentNode.parentNode.childNodes[3].childNodes[1];
+    //   if (trParent) console.log(item);
+    // }
 
-      const parentRequest = "lsn3-lesson-vocabulary__td--text";
-      if (parent == parentRequest) {
-        console.log(item.childNodes[1].innerText);
-      }
-    }
+    // const parentRequest = "lsn3-lesson-vocabulary__td--text";
+    // if (parent == parentRequest) {
+    //   console.log(item.childNodes[1].innerText);
+    // }
 
     if (item.lang != "en") {
-      if (item.children[0]) {
-        result.push(item.children[0].innerText);
+      const parent = item.parentNode.className;
+      if (!parent) {
+        const parentAudio =
+          item.parentNode.parentNode.childNodes[3].childNodes[1];
+        if (parentAudio) {
+          // console.log("!parent");
+          // console.log(item.innerHTML);
+          result.push(item.innerHTML);
+        }
       } else {
-        result.push(item.innerText);
+        console.log("else");
+        //console.log(item.childNodes[1].innerText);
+        result.push(item.childNodes[1].innerText);
       }
+
+      // if (item.children[0]) {
+      //   result.push(item.children[0].innerText);
+      // } else {
+      //   result.push(item.innerText);
+      // }
     }
   }
   //console.log(result);
