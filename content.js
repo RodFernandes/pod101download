@@ -2,9 +2,59 @@ console.log("Chrome Extension go");
 
 start();
 
+// function getAudiosComplementary() {
+//   const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
+//   let dataset = [{}];
+//   let count_versionb = 0;
+//   for (element of selection) {
+//     const dialogues = document.getElementsByClassName(element);
+
+//     if (dialogues) {
+//       let textList = getAudioText(element);
+
+//       for (let i = 0; i < dialogues.length; i++) {
+//         const datasetUrl = dialogues[i] ? dialogues[i].dataset.src : "";
+
+//         let text = "";
+
+//         if (isBlackListed(datasetUrl, "_b")) {
+//           if (count_versionb != 0) {
+//             text = textList[i - count_versionb];
+//           } else {
+//             text = textList[i - 1];
+//           }
+//           count_versionb += 1;
+//         } else {
+//           if (count_versionb != 0) {
+//             text = textList[i - count_versionb];
+//           } else {
+//             text = textList[i];
+//           }
+//         }
+
+//         if (isBlackListed(datasetUrl, "_e")) count_versionb += 1;
+
+//         if (!hasObjectInArray(dataset, datasetUrl)) {
+//           if (!isBlackListed(datasetUrl, "_e")) {
+//             const obj = {
+//               file: datasetUrl,
+//               text: text,
+//               //text: text[i] ? text[i].innerText : "",
+//             };
+//             dataset.push(obj);
+//           }
+//         }
+//       }
+//     }
+//   }
+//   console.log(count_versionb);
+//   console.log(dataset);
+//   return dataset;
+// }
+
 function getAudiosComplementary() {
   const selection = ["js-lsn3-play-dialogue", "js-lsn3-play-vocabulary"];
-  let dataset = [{}];
+  let dataset = [];
   let count_versionb = 0;
   for (element of selection) {
     const dialogues = document.getElementsByClassName(element);
@@ -18,18 +68,10 @@ function getAudiosComplementary() {
         let text = "";
 
         if (isBlackListed(datasetUrl, "_b")) {
-          if (count_versionb != 0) {
-            text = textList[i - count_versionb];
-          } else {
-            text = textList[i - 1];
-          }
           count_versionb += 1;
+          text = textList[i - count_versionb];
         } else {
-          if (count_versionb != 0) {
-            text = textList[i - count_versionb];
-          } else {
-            text = textList[i];
-          }
+          text = textList[i - count_versionb];
         }
 
         if (isBlackListed(datasetUrl, "_e")) count_versionb += 1;
@@ -37,7 +79,7 @@ function getAudiosComplementary() {
         if (!hasObjectInArray(dataset, datasetUrl)) {
           if (!isBlackListed(datasetUrl, "_e")) {
             const obj = {
-              file: datasetUrl,
+              file: setDomain(datasetUrl),
               text: text,
               //text: text[i] ? text[i].innerText : "",
             };
@@ -63,11 +105,16 @@ function getAudioText(element) {
   if (element == "js-lsn3-play-vocabulary") {
     text = document.getElementsByClassName("lsn3-lesson-vocabulary__term");
   }
+  console.log("getAudioText");
 
   for (item of text) {
     // if (!result.includes(item.innerText) && item.lang != "en") {
     if (item.lang != "en") {
-      result.push(item.innerText);
+      if (item.children[0]) {
+        result.push(item.children[0].innerText);
+      } else {
+        result.push(item.innerText);
+      }
     }
   }
   //console.log(result);
