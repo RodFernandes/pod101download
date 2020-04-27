@@ -16,6 +16,9 @@ function createAudioSection(data) {
 }
 
 function createAudioCompSection(data) {
+  console.log("createAudioCompSection");
+  console.log(data.audioComp.text);
+
   createSection("tableaudiocomp", data.audioComp);
   setQuantity(data.audioComp.length, "qtdaudiocomp");
 }
@@ -75,8 +78,12 @@ function createSection(id, data) {
       anchor.setAttribute("class", "btnDownload");
       anchor.setAttribute("href", item.file);
       anchor.innerHTML = "Download";
+      if (item.text) {
+        anchor.name = item.text;
+      }
       anchor.addEventListener("click", function (event) {
-        downloadFile(event.path[0].href, id);
+        console.log(event);
+        downloadFile(event.path[0].href, event.path[0].name, id);
       });
 
       td.appendChild(anchor);
@@ -120,7 +127,7 @@ function setFileFolder(id) {
   return "";
 }
 
-function downloadFile(url, id) {
+function downloadFile(url, text = "", id) {
   if (url) {
     let fileName = getFilename(url);
     const hasParam = fileName.indexOf("?");
@@ -137,7 +144,11 @@ function downloadFile(url, id) {
 
     const folder = setFileFolder(id);
     if (folder) {
-      fileName = folder + fileName;
+      if (text) {
+        fileName = folder + cleanString(text) + "_" + fileName;
+      } else {
+        fileName = folder + fileName;
+      }
     }
 
     fileName = number + "_" + title + "/" + fileName;
