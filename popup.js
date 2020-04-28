@@ -20,11 +20,26 @@ function createAudioSection(data) {
 }
 
 function createAudioCompSection(data) {
-  console.log("createAudioCompSection");
-  console.log(data.audioComp.text);
-
   createSection("tableaudiocomp", data.audioComp);
   setQuantity(data.audioComp.length, "qtdaudiocomp");
+}
+
+function createBtnDownloadAll(element, data) {
+  element = tableaudiocomp;
+  const el = "tableaudiocomp" + "_all";
+  const span = document.getElementById(el);
+  if (span) {
+    const anchor = document.createElement("a");
+    anchor.setAttribute("class", "btnDownload");
+    anchor.setAttribute("id", el + "_d");
+    anchor.innerHTML = "Download All";
+    anchor.name = "Download All";
+    anchor.addEventListener("click", function (event) {
+      event.path[0].setAttribute("class", "btnDownload _clicked");
+      downloadAll(data, "tableaudiocomp");
+    });
+    span.appendChild(anchor);
+  }
 }
 
 function setQuantity(qtd, element) {
@@ -115,6 +130,9 @@ function getStorageData() {
       setTitle(pod.lessonNumber, pod.title);
       setSubtitle(pod.subtitle);
       setQtdTotal();
+      createBtnDownloadAll("", pod);
+      //TEST
+      //downloadAll(pod);
     }
   });
 }
@@ -130,6 +148,56 @@ function setFileFolder(id) {
     return "vocabulary/";
   }
   return "";
+}
+
+function downloadAll(data, id) {
+  const items = data.audioComp;
+  const btndownload = document.getElementById("tableaudiocomp_all_d");
+  console.log(btndownload);
+  id = "tableaudiocomp";
+
+  let i = 0;
+  btndownload.innerText = "Download All (" + items.length + ")";
+  const timeout = setInterval(function () {
+    if (i < items.length) {
+      const btnFiles = document.getElementsByName(items[i].text);
+      if (btnFiles) {
+        btnFiles[0].setAttribute("class", "btnDownload _clicked");
+        console.log(btnFiles[0]);
+      }
+
+      console.log("count: " + i);
+      console.log("File: " + items[i].file);
+      console.log("Text: " + items[i].text);
+      console.log("lenght: " + items.length);
+      i++;
+      if (btndownload) {
+        let count = items.length - i;
+        let textBtn = "";
+        if (count > 0) textBtn = "Download All (" + count + ")";
+        else textBtn = "Download All (Completed)";
+        btndownload.innerText = textBtn;
+      }
+    } else {
+      console.log("time out clear");
+      clearTimeout(timeout);
+    }
+  }, 2 * 1000);
+
+  // let i = 0;
+  // console.log("time out start");
+  // const timeout = setInterval(function () {
+  //   console.log("count: " + i);
+  //   console.log("File: " + items[i].file);
+  //   console.log("Text: " + items[i].text);
+  //   console.log("lenght: " + items.length);
+  //   if (i > items.length) {
+  //     clearTimeout(timeout);
+  //     console.log("time out clear");
+  //   }
+  //   i++;
+  //   downloads = i;
+  // }, 2 * 1000);
 }
 
 function downloadFile(url, text = "", id) {
