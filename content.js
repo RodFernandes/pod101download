@@ -70,8 +70,11 @@ function getAudioText(element) {
     text = document.getElementsByClassName("lsn3-lesson-vocabulary__term");
   }
 
+  const lang = getLanguage();
+
   for (item of text) {
-    if (item.lang != "en") {
+    // if (item.lang != "en") {
+    if (item.lang == lang || item.lang == "") {
       const parent = item.parentNode.className;
       if (!parent && item.parentNode.parentNode.childNodes[3]) {
         const parentAudio =
@@ -86,6 +89,20 @@ function getAudioText(element) {
     }
   }
   //console.log(result);
+  return result;
+}
+getLanguage();
+function getLanguage() {
+  const host = location.host;
+  const langs = [
+    {
+      host: "www.englishclass101.com",
+      lang: "en",
+    },
+  ];
+  const result = langs.find((x) => x.host == host).lang;
+  console.log(host);
+  console.log(result);
   return result;
 }
 
