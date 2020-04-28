@@ -170,6 +170,7 @@ function downloadAll(data, id) {
       console.log("File: " + items[i].file);
       console.log("Text: " + items[i].text);
       console.log("lenght: " + items.length);
+      downloadFile(items[i].file, items[i].text, "tableaudiocomp");
       i++;
       if (btndownload) {
         let count = items.length - i;

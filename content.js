@@ -94,14 +94,48 @@ function getAudioText(element) {
 getLanguage();
 function getLanguage() {
   const host = location.host;
+  console.log(host);
   const langs = [
     {
       host: "www.englishclass101.com",
       lang: "en",
     },
+    {
+      host: "www.frenchpod101.com",
+      lang: "fr",
+    },
+    {
+      host: "www.italianpod101.com",
+      lang: "it",
+    },
+    {
+      host: "www.spanishpod101.com",
+      lang: "es",
+    },
+    {
+      host: "www.romanianpod101.com",
+      lang: "ro",
+    },
+    {
+      host: "www.polishpod101.com",
+      lang: "pl",
+    },
+    {
+      host: "www.chineseclass101.com",
+      lang: "zh",
+    },
+    {
+      host: "www.germanpod101.com",
+      lang: "de",
+    },
   ];
-  const result = langs.find((x) => x.host == host).lang;
-  console.log(host);
+  let result = langs.find((x) => x.host == host);
+  if (result) {
+    result = result.lang;
+  } else {
+    console.log("lang not found");
+    result = "en";
+  }
   console.log(result);
   return result;
 }
