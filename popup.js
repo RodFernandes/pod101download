@@ -70,21 +70,25 @@ function setQtdTotal() {
 function setTitle(number, data) {
   const title = document.getElementById("title");
   if (title) {
-    //copy
-    // title.innerHTML = data;
-    // title.innerHTML.select();
-    // document.execCommand("copy");
-    //end copy
     title.innerHTML = "Lesson: " + number + " - " + data;
-    copyTitle(data);
   }
 }
 
 function setSubtitle(data) {
   const title = document.getElementById("subtitle");
-  if (title) {
-    title.innerHTML = data;
-  }
+  if (!title) return;
+  title.innerHTML = data;
+  copyTitle(data);
+}
+
+function addBtnCopyTitle(title) {
+  const span = document.getElementById("copysubtitle");
+  if (!span) return;
+  const btn = document.createElement("button");
+  btn.setAttribute("class", "btnDownload");
+  btn.innerText = "Copy";
+  btn.addEventListener("click", copyTitle(title));
+  span.appendChild(btn);
 }
 
 function createSection(id, data) {
@@ -144,6 +148,7 @@ function getStorageData() {
       createAudioCompSection(pod);
       setTitle(pod.lessonNumber, pod.title);
       setSubtitle(pod.subtitle);
+      addBtnCopyTitle(pod.subtitle);
       setQtdTotal();
       createBtnDownloadAll("", pod);
       //TEST
