@@ -6,11 +6,14 @@ function start() {
   showDialoguesTextAll();
   showExamples();
   createObject();
+  //printPage();
 }
 
 function printPage() {
   window.print();
-  window.close();
+  setTimeout(function () {
+    window.close();
+  }, 1);
 }
 
 function getAudiosComplementary() {

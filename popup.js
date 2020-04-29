@@ -24,6 +24,15 @@ function createAudioCompSection(data) {
   setQuantity(data.audioComp.length, "qtdaudiocomp");
 }
 
+async function copyTitle(title) {
+  try {
+    await navigator.clipboard.writeText(cleanString(title));
+    console.log("Title copied to clipboard");
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
+}
+
 function createBtnDownloadAll(element, data) {
   element = tableaudiocomp;
   const el = "tableaudiocomp" + "_all";
@@ -61,7 +70,13 @@ function setQtdTotal() {
 function setTitle(number, data) {
   const title = document.getElementById("title");
   if (title) {
+    //copy
+    // title.innerHTML = data;
+    // title.innerHTML.select();
+    // document.execCommand("copy");
+    //end copy
     title.innerHTML = "Lesson: " + number + " - " + data;
+    copyTitle(data);
   }
 }
 
