@@ -28,8 +28,10 @@ async function copyTitle(title) {
   try {
     await navigator.clipboard.writeText(cleanString(title));
     console.log("Title copied to clipboard");
+    return true;
   } catch (err) {
     console.error("Failed to copy: ", err);
+    return false;
   }
 }
 
@@ -87,7 +89,13 @@ function addBtnCopyTitle(title) {
   const btn = document.createElement("button");
   btn.setAttribute("class", "btnDownload");
   btn.innerText = "Copy";
-  btn.addEventListener("click", copyTitle(title));
+  btn.addEventListener("click", function (e) {
+    const isCopied = copyTitle(title);
+    if (isCopied) {
+      btn.innerText = "Copied";
+      btn.setAttribute("class", "btnCopied");
+    }
+  });
   span.appendChild(btn);
 }
 
@@ -170,58 +178,75 @@ function setFileFolder(id) {
   return "";
 }
 
-function downloadAll(data, id) {
-  const items = data.audioComp;
-  const btndownload = document.getElementById("tableaudiocomp_all_d");
-  console.log(btndownload);
-  id = "tableaudiocomp";
-
-  let i = 0;
-  btndownload.innerText = "Download All (" + items.length + ")";
-  const timeout = setInterval(function () {
-    if (i < items.length) {
-      const btnFiles = document.getElementsByName(items[i].text);
-      if (btnFiles) {
-        btnFiles[0].setAttribute("class", "btnDownload _clicked");
-        console.log(btnFiles[0]);
-      }
-
-      console.log("count: " + i);
-      console.log("File: " + items[i].file);
-      console.log("Text: " + items[i].text);
-      console.log("lenght: " + items.length);
-      downloadFile(items[i].file, items[i].text, "tableaudiocomp");
-      i++;
-      if (btndownload) {
-        let count = items.length - i;
-        let textBtn = "";
-        if (count > 0) textBtn = "Download All (" + count + ")";
-        else textBtn = "Download All (Completed)";
-        btndownload.innerText = textBtn;
-      }
-    } else {
-      console.log("time out clear");
-      clearTimeout(timeout);
-    }
-  }, 2 * 1000);
-
-  // let i = 0;
-  // console.log("time out start");
-  // const timeout = setInterval(function () {
-  //   console.log("count: " + i);
-  //   console.log("File: " + items[i].file);
-  //   console.log("Text: " + items[i].text);
-  //   console.log("lenght: " + items.length);
-  //   if (i > items.length) {
-  //     clearTimeout(timeout);
-  //     console.log("time out clear");
-  //   }
-  //   i++;
-  //   downloads = i;
-  // }, 2 * 1000);
+function showTimer() {
+  const span = "";
+  const seconds = "";
+  const timer = setInterval(
+    {
+      //update
+    },
+    1 * 1000
+  );
 }
 
-function downloadFile(url, text = "", id) {
+// function downloadAll(data, id) {
+//   const items = data.audioComp;
+//   const btndownload = document.getElementById("tableaudiocomp_all_d");
+//   console.log(btndownload);
+//   id = "tableaudiocomp";
+
+//   let i = 0;
+//   btndownload.innerText = "Download All (" + items.length + ")";
+//   const timeout = setInterval(function () {
+//     if (i < items.length) {
+//       const btnFiles = document.getElementsByName(items[i].text);
+//       if (btnFiles) {
+//         btnFiles[0].setAttribute("class", "btnDownload _clicked");
+//         console.log(btnFiles[0]);
+//       }
+
+//       downloadFile(items[i].file, items[i].text, "tableaudiocomp", i + 1);
+//       i++;
+//       if (btndownload) {
+//         let count = items.length - i;
+//         let textBtn = "";
+//         if (count > 0) textBtn = "Download All (" + count + ")";
+//         else textBtn = "Download All (Completed)";
+//         btndownload.innerText = textBtn;
+//       }
+//     } else {
+//       console.log("time out clear");
+//       clearTimeout(timeout);
+//     }
+//   }, 2 * 1000);
+
+//   // let i = 0;
+//   // console.log("time out start");
+//   // const timeout = setInterval(function () {
+//   //   console.log("count: " + i);
+//   //   console.log("File: " + items[i].file);
+//   //   console.log("Text: " + items[i].text);
+//   //   console.log("lenght: " + items.length);
+//   //   if (i > items.length) {
+//   //     clearTimeout(timeout);
+//   //     console.log("time out clear");
+//   //   }
+//   //   i++;
+//   //   downloads = i;
+//   // }, 2 * 1000);
+// }
+
+function downloadAll(data, id) {
+  const obj = {
+    data: data,
+    id: id,
+  };
+  console.log(obj);
+  chrome.runtime.sendMessage(obj, function (response) {});
+}
+
+function downloadFile(url, text = "", id, seq) {
+  console.log("downloadFile");
   if (url) {
     let fileName = getFilename(url);
     const hasParam = fileName.indexOf("?");
@@ -239,17 +264,20 @@ function downloadFile(url, text = "", id) {
     if (folder) {
       if (text) {
         text = cleanString(text.trim());
+        if (seq) {
+          text = seq + "_" + text;
+        }
         fileName = folder + text + "_" + fileName;
       } else {
         fileName = folder + fileName;
       }
     }
 
-    fileName = number + "_" + title + "/" + fileName;
+    fileName = "101Donwloads/" + number + "_" + title + "/" + fileName;
 
-    //console.log(fileName);
+    console.log(url);
+    console.log(fileName);
 
-    //chrome.downloads.onDeterminingFilename({
     chrome.downloads.download({
       url: url,
       filename: fileName,
@@ -258,7 +286,7 @@ function downloadFile(url, text = "", id) {
 }
 
 function cleanString(string) {
-  return string.replace(/[-'`~!¡@#$%^&*()_|+=?¿;:'",<>\{\}\[\]\\\/]/gi, "");
+  return string.replace(/['`~!¡@#$%^&*()_|+=?¿;:'".,<>\{\}\[\]\\\/]/gi, "");
 }
 
 // function downloadFetchFile(filename, url) {

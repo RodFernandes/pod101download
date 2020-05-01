@@ -82,8 +82,14 @@ function getAudioText(element) {
       if (!parent && item.parentNode.parentNode.childNodes[3]) {
         const parentAudio =
           item.parentNode.parentNode.childNodes[3].childNodes[1];
+
+        console.log(parentAudio);
+        console.log(item.parentNode.parentNode.childNodes[3]);
+
         if (parentAudio) {
           result.push(item.innerHTML);
+          console.log(parentAudio);
+          console.log(item.innerHTML);
         }
       } else {
         if (item.childNodes[1]) result.push(item.childNodes[1].innerText);
@@ -139,7 +145,7 @@ function getLanguage() {
     console.log("lang not found");
     result = "en";
   }
-  console.log(result);
+  //console.log(result);
   return result;
 }
 

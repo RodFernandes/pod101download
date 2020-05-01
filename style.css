@@ -63,6 +63,23 @@
   top: 1px;
 }
 
+.btnCopied {
+  box-shadow: inset 0px 1px 0px 0px #d9fbbe;
+  background: linear-gradient(to bottom, purple 5%, #b452cc 100%);
+  background-color: purple;
+  border-radius: 6px;
+  border: 1px solid purple;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #aa47ae;
+}
+
 ._clicked {
   color: purple;
 }
