@@ -3,6 +3,14 @@ console.log("background running");
 chrome.runtime.onMessage.addListener(function (message, callback) {
   if (message.data) {
     downloadAll(message.data, message.id);
+    var opt = {
+      type: "basic",
+      title: "Donwload 101",
+      message: message.data.title + " background download started",
+      iconUrl: "icon_16x16.png",
+    };
+    chrome.notifications.create("", opt);
+    return true;
   }
 });
 
@@ -21,12 +29,22 @@ function downloadAll(data, id) {
       downloadFile(items[i].file, items[i].text, "tableaudiocomp", i + 1, data);
       chrome.runtime.sendMessage(
         { btnText: items[i].text, qtdTotal: items.length, qtdActive: i + 1 },
-        function (response) {}
+        function () {}
       );
       i++;
     } else {
       clearTimeout(timeout);
-      chrome.runtime.sendMessage({ items: "end" }, function () {});
+      chrome.runtime.sendMessage({ items: "end" }, function () {
+        return true;
+      });
+
+      var opt = {
+        type: "basic",
+        title: "Donwload 101",
+        message: data.title + " Completed",
+        iconUrl: "icon_16x16.png",
+      };
+      chrome.notifications.create("", opt);
       console.log("end");
     }
   }, 2 * 1000);

@@ -5,7 +5,7 @@
 let qtdTotal = 0;
 let pod = {};
 getStorageData();
-//printPage();
+//printPage()
 
 chrome.runtime.onMessage.addListener(function (message, callback) {
   console.log("message");
@@ -20,6 +20,7 @@ chrome.runtime.onMessage.addListener(function (message, callback) {
       btndownload.innerText =
         "Download All (" + (message.qtdTotal - message.qtdActive) + ")";
     }
+    return true;
   }
 
   if (message.items) {
@@ -27,8 +28,10 @@ chrome.runtime.onMessage.addListener(function (message, callback) {
       const btndownload = document.getElementById("tableaudiocomp_all_d");
       if (btndownload) {
         btndownload.innerText = "Download All (Completed)";
+        btndownload.setAttribute("class", "btnCopied");
       }
     }
+    return true;
   }
 });
 
@@ -170,7 +173,7 @@ function createSection(id, data) {
       }
       anchor.addEventListener("click", function (event) {
         console.log(event);
-        event.path[0].setAttribute("class", "btnDownload _clicked");
+        event.path[0].setAttribute("class", "btnDownload btnCopied");
         downloadFile(event.path[0].href, event.path[0].name, id);
       });
 
@@ -253,7 +256,7 @@ function downloadAll(data, id) {
   if (btndownload) {
     btndownload.innerText = "Download All (" + data.audioComp.length + ")";
   }
-  chrome.runtime.sendMessage(obj, function (response) {});
+  chrome.runtime.sendMessage(obj, function () {});
 }
 
 function downloadFile(url, text = "", id, seq) {

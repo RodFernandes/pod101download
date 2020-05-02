@@ -88,8 +88,6 @@ function getAudioText(element) {
 
         if (parentAudio) {
           result.push(item.innerHTML);
-          console.log(parentAudio);
-          console.log(item.innerHTML);
         }
       } else {
         if (item.childNodes[1]) result.push(item.childNodes[1].innerText);
@@ -295,10 +293,7 @@ function showExamples() {
 function isBlackListed(url, wildcard) {
   if (url) {
     const name = url.replace(/^(.*[/\\])?/, "").replace(/(\.[^.]*)$/, "");
-    return name.indexOf(wildcard) != -1 ||
-      name.indexOf("fluency_fast_premium_checklist") != -1
-      ? true
-      : false;
+    return name.indexOf(wildcard) != -1 ? true : false;
   }
 }
 
