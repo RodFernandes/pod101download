@@ -1,6 +1,6 @@
 console.log("background running");
 
-chrome.runtime.onMessage.addListener(function (message, callback) {
+chrome.runtime.onMessage.addListener(async function (message, callback) {
   if (message.data) {
     downloadAll(message.data, message.id);
     var opt = {
@@ -10,8 +10,16 @@ chrome.runtime.onMessage.addListener(function (message, callback) {
       iconUrl: "icon_16x16.png",
     };
     chrome.notifications.create("", opt);
-    return true;
   }
+  //return Promise.resolve("Dummy response to keep the console quiet");
+});
+
+chrome.storage.onChanged.addListener(function (changes, storageName) {
+  const audio = changes.pod.newValue.audio.length;
+  const audioComp = changes.pod.newValue.audioComp.length;
+  const pdf = changes.pod.newValue.pdf.length;
+  const total = audio + audioComp + pdf + "";
+  chrome.browserAction.setBadgeText({ text: total });
 });
 
 function downloadAll(data, id) {

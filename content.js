@@ -1,19 +1,29 @@
 console.log("Chrome Extension go");
 
+chrome.runtime.onMessage.addListener(async function (
+  request,
+  sender,
+  sendResponse
+) {
+  console.log("Message");
+  console.log(request);
+  if (request.app == "start") {
+    console.log("start");
+    start();
+    setTimeout(function () {
+      sendResponse(true);
+      return Promise.resolve("Dummy response to keep the console quiet");
+    }, 500);
+  }
+  return false;
+});
+
 start();
 
 function start() {
   showDialoguesTextAll();
   showExamples();
   createObject();
-  //printPage();
-}
-
-function printPage() {
-  window.print();
-  setTimeout(function () {
-    window.close();
-  }, 1);
 }
 
 function getAudiosComplementary() {
@@ -98,7 +108,7 @@ function getAudioText(element) {
   //console.log(result);
   return result;
 }
-getLanguage();
+//getLanguage();
 function getLanguage() {
   const host = location.host;
   console.log(host);

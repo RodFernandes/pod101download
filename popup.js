@@ -5,10 +5,23 @@
 let qtdTotal = 0;
 let pod = {};
 let prevMessageText = "";
-getStorageData();
-//printPage()
 
-chrome.runtime.onMessage.addListener(function (message, callback) {
+getStorageData();
+
+//messageCallData();
+
+function messageCallData() {
+  const message = {
+    app: "start",
+  };
+  chrome.runtime.sendMessage(message, function (response) {
+    console.log("message result");
+    console.log(response);
+    if (response) getStorageData();
+  });
+}
+
+chrome.runtime.onMessage.addListener(async function (message, callback) {
   console.log("message");
   console.log(message);
   if (message.btnText) {
