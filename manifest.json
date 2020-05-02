@@ -2,10 +2,19 @@
   "manifest_version": 2,
   "name": "Pod101Donwload",
   "description": "Pod 101 Donwload",
-  "version": "1.1",
+  "version": "1.2",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "*://www.italianpod101.com/*",
+        "*://www.frenchpod101.com/*",
+        "*://www.englishclass101.com/*",
+        "*://www.spanishpod101.com/*",
+        "*://www.romanianpod101.com/*",
+        "*://www.polishpod101.com/*",
+        "*://www.germanpod101.com/*",
+        "*://www.chineseclass101.com/*"
+      ],
       "css": ["style.css"],
       "js": ["content.js"]
     }
