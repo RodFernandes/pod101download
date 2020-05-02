@@ -217,37 +217,64 @@ function getPdfs() {
   if (pdfs) {
     const list = pdfs.getElementsByTagName("a");
     for (item of list) {
-      //const file = item.dataset.trackurl;
-      //const file = item.href;
-      //console.log(item.href);
-      // if (!isBlackListed(file,"_e")) {
       const obj = {
         file: item.href,
       };
       dataset.push(obj);
-      //}
     }
-    //console.log(dataset);
   }
   return dataset;
 }
 
 function getTitle() {
-  const lesson = document.getElementsByClassName("r101-headline__cell-a");
+  const classNames = ["r101-headline__cell-a", "r101-headline__container--765"];
+
   let result = "";
-  if (lesson) {
-    result = lesson[0].childNodes[1].innerText;
+  for (className of classNames) {
+    let lesson = document.getElementsByClassName(className);
+    if (lesson && lesson[0]) {
+      result = lesson[0].childNodes[1].innerText;
+      console.log(result);
+      break;
+    }
   }
+
   return result;
+
+  // let lesson = document.getElementsByClassName("r101-headline__cell-a");
+
+  // let result = "";
+  // if (lesson && lesson[0]) {
+  //   result = lesson[0].childNodes[1].innerText;
+  // } else {
+  //   lesson = document.getElementsByClassName("r101-headline__container--765");
+  //   if (lesson) {
+  //     result = lesson[0].childNodes[1].innerText;
+  //   }
+  // }
+  // return result;
 }
 
 function getSubtitle() {
-  const lesson = document.getElementsByClassName("r101-headline__cell-a");
+  const classNames = ["r101-headline__cell-a", "r101-headline__container--765"];
   let result = "";
-  if (lesson) {
-    result = lesson[0].childNodes[5].innerText;
+
+  for (className of classNames) {
+    const lesson = document.getElementsByClassName(className);
+    if (lesson && lesson[0]) {
+      result = lesson[0].childNodes[5].innerText;
+      break;
+    }
   }
+
   return result;
+
+  // const lesson = document.getElementsByClassName("r101-headline__cell-a");
+  // let result = "";
+  // if (lesson) {
+  //   result = lesson[0].childNodes[5].innerText;
+  // }
+  // return result;
 }
 
 function showDialoguesTextAll() {

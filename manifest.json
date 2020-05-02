@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Pod101Donwload",
   "description": "Pod 101 Donwload",
-  "version": "0.1",
+  "version": "1.0",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -19,9 +19,6 @@
     "default_popup": "index.html",
     "default_title": "Download content Pod 101"
   },
-  "chrome_url_overrides": {
-    "newtab": "index.html"
-  },
   "offline_enabled": true,
-  "permissions": ["storage", "downloads", "notifications"]
+  "permissions": ["storage", "downloads", "tabs", "notifications"]
 }

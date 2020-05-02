@@ -4,6 +4,7 @@
 
 let qtdTotal = 0;
 let pod = {};
+let prevMessageText = "";
 getStorageData();
 //printPage()
 
@@ -13,8 +14,15 @@ chrome.runtime.onMessage.addListener(function (message, callback) {
   if (message.btnText) {
     const btnFiles = document.getElementsByName(message.btnText);
     if (btnFiles) {
-      btnFiles[0].setAttribute("class", "btnCopied");
+      if (message.btnText != prevMessageText) {
+        btnFiles[0].setAttribute("class", "btnCopied");
+      } else {
+        btnFiles[1].setAttribute("class", "btnCopied");
+      }
+
+      prevMessageText = message.btnText;
     }
+
     const btndownload = document.getElementById("tableaudiocomp_all_d");
     if (btndownload) {
       btndownload.innerText =
@@ -165,11 +173,7 @@ function createSection(id, data) {
       anchor.setAttribute("href", item.file);
       anchor.innerHTML = "Download";
       if (item.text) {
-        if (item.file.includes("_b.mp3")) {
-          anchor.name = item.text + "_b";
-        } else {
-          anchor.name = item.text;
-        }
+        anchor.name = item.text;
       }
       anchor.addEventListener("click", function (event) {
         console.log(event);
