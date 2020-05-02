@@ -22,6 +22,7 @@ start();
 
 function start() {
   showDialoguesTextAll();
+  showDialog2All();
   showExamples();
   createObject();
 }
@@ -144,6 +145,18 @@ function getLanguage() {
     {
       host: "www.germanpod101.com",
       lang: "de",
+    },
+    {
+      host: "www.dutchpod101.com",
+      lang: "nl",
+    },
+    {
+      host: "www.russianpod101.com",
+      lang: "ru",
+    },
+    {
+      host: "www.japanesepod101.com",
+      lang: "jp",
     },
   ];
   let result = langs.find((x) => x.host == host);
@@ -295,6 +308,13 @@ function getSubtitle() {
 
 function showDialoguesTextAll() {
   const all = document.getElementById("dialogue_tab_all_0");
+  if (all) {
+    all.childNodes[1].click();
+  }
+}
+
+function showDialog2All() {
+  const all = document.getElementById("dialogue_tab_all_1");
   if (all) {
     all.childNodes[1].click();
   }
