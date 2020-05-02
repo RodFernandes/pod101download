@@ -83,8 +83,8 @@ function getAudioText(element) {
         const parentAudio =
           item.parentNode.parentNode.childNodes[3].childNodes[1];
 
-        console.log(parentAudio);
-        console.log(item.parentNode.parentNode.childNodes[3]);
+        // console.log(parentAudio);
+        // console.log(item.parentNode.parentNode.childNodes[3]);
 
         if (parentAudio) {
           result.push(item.innerHTML);
@@ -234,7 +234,7 @@ function getTitle() {
     let lesson = document.getElementsByClassName(className);
     if (lesson && lesson[0]) {
       result = lesson[0].childNodes[1].innerText;
-      console.log(result);
+      //console.log(result);
       break;
     }
   }
@@ -262,7 +262,13 @@ function getSubtitle() {
   for (className of classNames) {
     const lesson = document.getElementsByClassName(className);
     if (lesson && lesson[0]) {
-      result = lesson[0].childNodes[5].innerText;
+      const p = lesson[0].getElementsByTagName("p")[0];
+      if (!p) {
+        result = lesson[0].childNodes[5].innerText;
+      } else {
+        result = p.innerText;
+      }
+
       break;
     }
   }
