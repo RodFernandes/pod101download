@@ -7,7 +7,30 @@ let pod = {};
 getStorageData();
 //printPage();
 
-function printPage() {}
+chrome.runtime.onMessage.addListener(function (message, callback) {
+  console.log("message");
+  console.log(message);
+  if (message.btnText) {
+    const btnFiles = document.getElementsByName(message.btnText);
+    if (btnFiles) {
+      btnFiles[0].setAttribute("class", "btnCopied");
+    }
+    const btndownload = document.getElementById("tableaudiocomp_all_d");
+    if (btndownload) {
+      btndownload.innerText =
+        "Download All (" + (message.qtdTotal - message.qtdActive) + ")";
+    }
+  }
+
+  if (message.items) {
+    if (message.items == "end") {
+      const btndownload = document.getElementById("tableaudiocomp_all_d");
+      if (btndownload) {
+        btndownload.innerText = "Download All (Completed)";
+      }
+    }
+  }
+});
 
 function createPdfSection(data) {
   createSection("tablepdf", data.pdf);
@@ -53,6 +76,20 @@ function createBtnDownloadAll(element, data) {
   }
 }
 
+function createBtnNewTab() {
+  const span = document.getElementById("tableaudiocomp_all_newtab");
+  if (span) {
+    const anchor = document.createElement("a");
+    anchor.setAttribute("class", "btnDownload");
+    anchor.innerHTML = "New Tab";
+    anchor.name = "new_tab";
+    anchor.addEventListener("click", function (event) {
+      chrome.tabs.create({ url: "index.html" });
+    });
+    span.appendChild(anchor);
+  }
+}
+
 function setQuantity(qtd, element) {
   const span = document.getElementById(element);
   if (span) {
@@ -80,7 +117,7 @@ function setSubtitle(data) {
   const title = document.getElementById("subtitle");
   if (!title) return;
   title.innerHTML = data;
-  copyTitle(data);
+  //copyTitle(data);
 }
 
 function addBtnCopyTitle(title) {
@@ -125,7 +162,11 @@ function createSection(id, data) {
       anchor.setAttribute("href", item.file);
       anchor.innerHTML = "Download";
       if (item.text) {
-        anchor.name = item.text;
+        if (item.file.includes("_b.mp3")) {
+          anchor.name = item.text + "_b";
+        } else {
+          anchor.name = item.text;
+        }
       }
       anchor.addEventListener("click", function (event) {
         console.log(event);
@@ -141,30 +182,6 @@ function createSection(id, data) {
   }
 }
 
-function getStorageData() {
-  console.log("get Storage");
-  chrome.storage.local.get("pod", function (data) {
-    if (typeof data.pod == "undefined") {
-      console.log("error getStorageData");
-    } else {
-      //console.log(data.pod);
-      //result = data.pod;
-      pod = data.pod;
-
-      createPdfSection(pod);
-      createAudioSection(pod);
-      createAudioCompSection(pod);
-      setTitle(pod.lessonNumber, pod.title);
-      setSubtitle(pod.subtitle);
-      addBtnCopyTitle(pod.subtitle);
-      setQtdTotal();
-      createBtnDownloadAll("", pod);
-      //TEST
-      //downloadAll(pod);
-    }
-  });
-}
-
 function getFilename(url) {
   const list = url.split("/");
   let fileName = list[list.length - 1];
@@ -176,17 +193,6 @@ function setFileFolder(id) {
     return "vocabulary/";
   }
   return "";
-}
-
-function showTimer() {
-  const span = "";
-  const seconds = "";
-  const timer = setInterval(
-    {
-      //update
-    },
-    1 * 1000
-  );
 }
 
 // function downloadAll(data, id) {
@@ -241,7 +247,12 @@ function downloadAll(data, id) {
     data: data,
     id: id,
   };
-  console.log(obj);
+
+  const btndownload = document.getElementById("tableaudiocomp_all_d");
+  console.log(btndownload);
+  if (btndownload) {
+    btndownload.innerText = "Download All (" + data.audioComp.length + ")";
+  }
   chrome.runtime.sendMessage(obj, function (response) {});
 }
 
@@ -306,3 +317,28 @@ function cleanString(string) {
 //     })
 //     .catch(() => alert("download error: -> " + url));
 // }
+
+function getStorageData() {
+  console.log("get Storage");
+  chrome.storage.local.get("pod", function (data) {
+    if (typeof data.pod == "undefined") {
+      console.log("error getStorageData");
+    } else {
+      //console.log(data.pod);
+      //result = data.pod;
+      pod = data.pod;
+
+      createPdfSection(pod);
+      createAudioSection(pod);
+      createAudioCompSection(pod);
+      setTitle(pod.lessonNumber, pod.title);
+      setSubtitle(pod.subtitle);
+      addBtnCopyTitle(pod.subtitle);
+      setQtdTotal();
+      createBtnDownloadAll("", pod);
+      createBtnNewTab();
+      //TEST
+      //downloadAll(pod);
+    }
+  });
+}

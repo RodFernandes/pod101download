@@ -19,6 +19,9 @@
     "default_popup": "index.html",
     "default_title": "Download content Pod 101"
   },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
   "offline_enabled": true,
-  "permissions": ["storage", "downloads"]
+  "permissions": ["storage", "downloads", "notifications"]
 }

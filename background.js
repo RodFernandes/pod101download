@@ -1,20 +1,33 @@
 console.log("background running");
 
 chrome.runtime.onMessage.addListener(function (message, callback) {
-  if (message) {
+  if (message.data) {
     downloadAll(message.data, message.id);
   }
 });
 
 function downloadAll(data, id) {
   console.log("downloadAll");
+
+  let obj = {
+    btnText: "",
+  };
+
   const items = data.audioComp;
   id = "tableaudiocomp";
   let i = 0;
   const timeout = setInterval(function () {
     if (i < items.length) {
       downloadFile(items[i].file, items[i].text, "tableaudiocomp", i + 1, data);
+      chrome.runtime.sendMessage(
+        { btnText: items[i].text, qtdTotal: items.length, qtdActive: i + 1 },
+        function (response) {}
+      );
       i++;
+    } else {
+      clearTimeout(timeout);
+      chrome.runtime.sendMessage({ items: "end" }, function () {});
+      console.log("end");
     }
   }, 2 * 1000);
 }
