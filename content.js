@@ -1,22 +1,22 @@
 console.log("Chrome Extension go");
 
-chrome.runtime.onMessage.addListener(async function (
-  request,
-  sender,
-  sendResponse
-) {
-  console.log("Message");
-  console.log(request);
-  if (request.app == "start") {
-    console.log("start");
-    start();
-    setTimeout(function () {
-      sendResponse(true);
-      return Promise.resolve("Dummy response to keep the console quiet");
-    }, 500);
-  }
-  return false;
-});
+// chrome.runtime.onMessage.addListener(async function (
+//   request,
+//   sender,
+//   sendResponse
+// ) {
+//   console.log("Message");
+//   console.log(request);
+//   if (request.app == "start") {
+//     console.log("start");
+//     start();
+//     setTimeout(function () {
+//       sendResponse(true);
+//       return Promise.resolve("Dummy response to keep the console quiet");
+//     }, 500);
+//   }
+//   return false;
+// });
 
 start();
 
@@ -74,35 +74,70 @@ function getAudiosComplementary() {
 
 function getAudioText(element) {
   let text = [];
+  let audioLine = "";
+  let audioLine05 = "";
   let result = [];
 
   if (element == "js-lsn3-play-dialogue") {
     text = document.getElementsByClassName("lsn3-lesson-dialogue__td--text");
+    // audioLine = element.parentNode.getElementsByClassName(
+    //   "lsn3-lesson-dialogue__td--play"
+    // );
   }
 
   if (element == "js-lsn3-play-vocabulary") {
     text = document.getElementsByClassName("lsn3-lesson-vocabulary__term");
+    // audioLine = element.parentNode.getElementsByClassName(
+    //   "lsn3-lesson-vocabulary__td--play"
+    // );
   }
 
   const lang = getLanguage();
 
   for (item of text) {
     // if (item.lang != "en") {
+
+    if (element == "js-lsn3-play-dialogue") {
+      audioLine = item.parentNode.getElementsByClassName(
+        "lsn3-lesson-dialogue__td--play"
+      );
+
+      if (audioLine.length <= 0) {
+        continue;
+      }
+    } else {
+      audioLine = item.parentNode.getElementsByClassName(
+        "lsn3-lesson-vocabulary__td--play"
+      );
+
+      //console.log(audioLine);
+      audioLine05 = item.parentNode.getElementsByClassName(
+        "lsn3-lesson-vocabulary__td--play05 play05"
+      );
+
+      // if (audioLine.length <= 0) {
+      //   if (audioLine05.length > 0) {
+      //   } else {
+      //     continue;
+      //   }
+      // }
+    }
+
     if (item.lang == lang || item.lang == "") {
       const parent = item.parentNode.className;
       if (!parent && item.parentNode.parentNode.childNodes[3]) {
         const parentAudio =
           item.parentNode.parentNode.childNodes[3].childNodes[1];
 
-        // console.log(parentAudio);
-        // console.log(item.parentNode.parentNode.childNodes[3]);
-
         if (parentAudio) {
           result.push(item.innerHTML);
         }
       } else {
-        if (item.childNodes[1]) result.push(item.childNodes[1].innerText);
-        else result.push(item.innerText);
+        if (item.childNodes[1]) {
+          result.push(item.childNodes[1].innerText);
+        } else {
+          result.push(item.innerText);
+        }
       }
     }
   }

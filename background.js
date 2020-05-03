@@ -1,6 +1,6 @@
 console.log("background running");
 
-chrome.runtime.onMessage.addListener(async function (message, callback) {
+chrome.runtime.onMessage.addListener(function (message, callback) {
   if (message.data) {
     downloadAll(message.data, message.id);
     var opt = {
@@ -15,11 +15,13 @@ chrome.runtime.onMessage.addListener(async function (message, callback) {
 });
 
 chrome.storage.onChanged.addListener(function (changes, storageName) {
-  const audio = changes.pod.newValue.audio.length;
-  const audioComp = changes.pod.newValue.audioComp.length;
-  const pdf = changes.pod.newValue.pdf.length;
-  const total = audio + audioComp + pdf + "";
-  chrome.browserAction.setBadgeText({ text: total });
+  // const audio = changes.pod.newValue.audio.length;
+  // const audioComp = changes.pod.newValue.audioComp.length;
+  // const pdf = changes.pod.newValue.pdf.length;
+  // const total = audio + audioComp + pdf + "";
+
+  const audioComp = changes.pod.newValue.audioComp.length + "";
+  chrome.browserAction.setBadgeText({ text: audioComp });
 });
 
 function downloadAll(data, id) {
