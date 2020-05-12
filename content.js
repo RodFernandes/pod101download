@@ -80,16 +80,10 @@ function getAudioText(element) {
 
   if (element == "js-lsn3-play-dialogue") {
     text = document.getElementsByClassName("lsn3-lesson-dialogue__td--text");
-    // audioLine = element.parentNode.getElementsByClassName(
-    //   "lsn3-lesson-dialogue__td--play"
-    // );
   }
 
   if (element == "js-lsn3-play-vocabulary") {
     text = document.getElementsByClassName("lsn3-lesson-vocabulary__term");
-    // audioLine = element.parentNode.getElementsByClassName(
-    //   "lsn3-lesson-vocabulary__td--play"
-    // );
   }
 
   const lang = getLanguage();
@@ -106,15 +100,13 @@ function getAudioText(element) {
         continue;
       }
     } else {
-      audioLine = item.parentNode.getElementsByClassName(
-        "lsn3-lesson-vocabulary__td--play"
-      );
-
+      // audioLine = item.parentNode.getElementsByClassName(
+      //   "lsn3-lesson-vocabulary__td--play"
+      // );
       //console.log(audioLine);
-      audioLine05 = item.parentNode.getElementsByClassName(
-        "lsn3-lesson-vocabulary__td--play05 play05"
-      );
-
+      // audioLine05 = item.parentNode.getElementsByClassName(
+      //   "lsn3-lesson-vocabulary__td--play05 play05"
+      // );
       // if (audioLine.length <= 0) {
       //   if (audioLine05.length > 0) {
       //   } else {
@@ -126,8 +118,12 @@ function getAudioText(element) {
     if (item.lang == lang || item.lang == "") {
       const parent = item.parentNode.className;
       if (!parent && item.parentNode.parentNode.childNodes[3]) {
-        const parentAudio =
+        const parentChildNode3 =
           item.parentNode.parentNode.childNodes[3].childNodes[1];
+
+        let parentAudio = parentChildNode3
+          ? parentChildNode3
+          : item.parentNode.parentNode.childNodes[2].childNodes[1];
 
         if (parentAudio) {
           result.push(item.innerHTML);
@@ -361,8 +357,9 @@ function getLessonNumber() {
   if (numbers) {
     const idx = numbers[0].selectedIndex;
     const text = numbers[0][idx].text;
-    let selected = text.substring(1, 3).trim();
-
+    let selected = text.substring(0, 3).trim();
+    console.log("selected");
+    console.log(selected);
     for (let i = 0; i <= 1; i++) {
       if (selected.length <= 2) {
         selected = "0" + selected;
